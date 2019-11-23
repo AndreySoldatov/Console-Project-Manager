@@ -12,11 +12,12 @@ namespace Console_Project_Manager
 {
     struct Project
     {
-        public string projectName;
-        public string done;
-        public string unDone;
-        public string inProgress;
-        public string comments;
+        public string ProjectName;
+        public string Done;
+        public string UnDone;
+        public string InProgress;
+        public string Comments;
+        public string Authors;
     }
     class Program
     {
@@ -83,9 +84,9 @@ namespace Console_Project_Manager
         public static Project ReadingOneProject(string filePath, string name)
         {
             Project pr = new Project();
-            pr.projectName = name;
-            pr.comments = "";
-            pr.done = "";
+            pr.ProjectName = name;
+            pr.Comments = "";
+            pr.Done = "";
             using (StreamReader read = new StreamReader(filePath + "\\main.ctm"))
             {
                 int currentReading = 0;
@@ -96,10 +97,10 @@ namespace Console_Project_Manager
                     {
                         for (int i = 2; i < line.Length; i++)
                         {
-                            pr.comments += line[i];
+                            pr.Comments += line[i];
                         }
 
-                        pr.comments += '`';
+                        pr.Comments += '`';
                     }
 
                     if (!string.IsNullOrEmpty(line))
@@ -110,10 +111,10 @@ namespace Console_Project_Manager
                                 {
                                     for (int i = 4; i < line.Length; i++)
                                     {
-                                        pr.done += line[i];
+                                        pr.Done += line[i];
                                     }
 
-                                    pr.done += '`';
+                                    pr.Done += '`';
                                     break;
                                 }
 
@@ -121,10 +122,10 @@ namespace Console_Project_Manager
                                 {
                                     for (int i = 4; i < line.Length; i++)
                                     {
-                                        pr.inProgress += line[i];
+                                        pr.InProgress += line[i];
                                     }
 
-                                    pr.inProgress += '`';
+                                    pr.InProgress += '`';
                                     break;
                                 }
 
@@ -132,10 +133,20 @@ namespace Console_Project_Manager
                                 {
                                     for (int i = 4; i < line.Length; i++)
                                     {
-                                        pr.unDone += line[i];
+                                        pr.UnDone += line[i];
                                     }
 
-                                    pr.unDone += '`';
+                                    pr.UnDone += '`';
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    for (int i = 4; i < line.Length; i++)
+                                    {
+                                        pr.Authors += line[i];
+                                    }
+
+                                    pr.Authors += '`';
                                     break;
                                 }
 
@@ -155,6 +166,11 @@ namespace Console_Project_Manager
                     if (!string.IsNullOrEmpty(line) && line[0] == '<' && line[1] == 'u')
                     {
                         currentReading = 3;
+                    }
+
+                    if (!string.IsNullOrEmpty(line) && line[0] == '<' && line[1] == 'a')
+                    {
+                        currentReading = 4;
                     }
 
                     if (!string.IsNullOrEmpty(line) && line[0] == '>')
@@ -177,10 +193,29 @@ namespace Console_Project_Manager
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Project Name: {pr.projectName}\n");
-            Console.WriteLine($"Comments to the {pr.projectName}: \n");
+            Console.WriteLine($"Project Name: {pr.ProjectName}\n");
+            Console.WriteLine("");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Authors of {pr.ProjectName}: \n");
             Console.Write("    ");
-            foreach (var comment in pr.comments)
+            foreach (var author in pr.Authors)
+            {
+                if (author != '`')
+                {
+                    Console.Write(author);
+                }
+                else
+                {
+                    Console.Write("\n    ");
+                }
+            }
+            Console.WriteLine("");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Comments to the {pr.ProjectName}: \n");
+            Console.Write("    ");
+            foreach (var comment in pr.Comments)
             {
                 if (comment != '`')
                 {
@@ -198,9 +233,9 @@ namespace Console_Project_Manager
             Console.WriteLine("");
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"What is done in {pr.projectName}: \n");
+            Console.WriteLine($"What is done in {pr.ProjectName}: \n");
             Console.Write("    ");
-            foreach (var done in pr.done)
+            foreach (var done in pr.Done)
             {
                 if (done != '`')
                 {
@@ -218,9 +253,9 @@ namespace Console_Project_Manager
             Console.WriteLine("");
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"What is in progress in {pr.projectName}: \n");
+            Console.WriteLine($"What is in progress in {pr.ProjectName}: \n");
             Console.Write("    ");
-            foreach (var inProgress in pr.inProgress)
+            foreach (var inProgress in pr.InProgress)
             {
                 if (inProgress != '`')
                 {
@@ -238,9 +273,9 @@ namespace Console_Project_Manager
             Console.WriteLine("");
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"What is not done yet in {pr.projectName}: \n");
+            Console.WriteLine($"What is not done yet in {pr.ProjectName}: \n");
             Console.Write("    ");
-            foreach (var undone in pr.unDone)
+            foreach (var undone in pr.UnDone)
             {
                 if (undone != '`')
                 {
@@ -268,9 +303,26 @@ namespace Console_Project_Manager
                 write.WriteLine("</head>");
                 write.WriteLine("<body>");
                 write.WriteLine($"<H1>Project name: {name}</H1>");
-                write.WriteLine($"<H3 style=\"padding: 0px 0px 0px 20px;\">Project Comments: {name}</H3>");
+                write.WriteLine($"<H3 style=\"padding: 0px 0px 0px 20px;\">Authors of {name}</H3>");
                 string word = "";
-                foreach (var comment in pr.comments)
+                foreach (var comment in pr.Authors)
+                {
+                    if (comment != '`')
+                    {
+                        word += comment;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(word))
+                        {
+                            write.WriteLine($"<p style=\"padding: 0px 0px 0px 40px;\">{word}</p>");
+                            word = "";
+                        }
+                    }
+                }
+                write.WriteLine($"<H3 style=\"padding: 0px 0px 0px 20px;\">Project Comments: {name}</H3>");
+                word = "";
+                foreach (var comment in pr.Comments)
                 {
                     if (comment != '`')
                     {
@@ -287,7 +339,7 @@ namespace Console_Project_Manager
                 }
                 write.WriteLine($"<font color=\"black\"><H3 style=\"padding: 0px 0px 0px 20px;\">What is done in {name}</H3>");
                 word = "";
-                foreach (var done in pr.done)
+                foreach (var done in pr.Done)
                 {
                     if (done != '`')
                     {
@@ -304,7 +356,7 @@ namespace Console_Project_Manager
                 }
                 write.WriteLine($"<font color=\"black\"><H3 style=\"padding: 0px 0px 0px 20px;\">What is in Progress in {name}</H3>");
                 word = "";
-                foreach (var inProgress in pr.inProgress)
+                foreach (var inProgress in pr.InProgress)
                 {
                     if (inProgress != '`')
                     {
@@ -321,7 +373,7 @@ namespace Console_Project_Manager
                 }
                 write.WriteLine($"<font color=\"black\"><H3 style=\"padding: 0px 0px 0px 20px;\">What is not done in {name}</H3>");
                 word = "";
-                foreach (var undone in pr.unDone)
+                foreach (var undone in pr.UnDone)
                 {
                     if (undone != '`')
                     {
@@ -348,6 +400,15 @@ namespace Console_Project_Manager
             using (StreamWriter writer = File.CreateText(prjPath + "\\main.ctm"))
             {
                 writer.WriteLine($"[{name}");
+                writer.WriteLine("<a");
+                Console.WriteLine($"Authors of {name}? Enter \"all\" for finishing");
+                string authors = Console.ReadLine();
+                while (authors != "all")
+                {
+                    writer.WriteLine($"    {authors}");
+                    authors = Console.ReadLine();
+                }
+                writer.WriteLine(">");
                 writer.WriteLine("<d");
                 Console.WriteLine($"What you have already done in {name}? Enter \"all\" for finishing");
                 string done = Console.ReadLine();
@@ -396,14 +457,15 @@ namespace Console_Project_Manager
                 case "help":
                     {
                         Console.Clear();
-                        Console.WriteLine("Enter \"new PLACE SOMETHING\" to create new task in one of the PLACES");
+                        Console.WriteLine("Enter \"new PLACE* SOMETHING\" to create new task in one of the PLACES");
                         Console.WriteLine("Enter \"delete PLACE SOMETHING\" to delete task in one of the PLACES");
-                        Console.WriteLine("Enter \"move PLACE1 PLACE2 SOMETHING\" to move task from PLACE1 to PLACE2");
-                        Console.WriteLine("PLACE:");
+                        Console.WriteLine("Enter \"move PLACE1 PLACE2 SOMETHING\" to move task from PLACE1 to PLACE2\n");
+                        Console.WriteLine("*PLACE:");
                         Console.WriteLine("    comment");
                         Console.WriteLine("    done");
                         Console.WriteLine("    inprogress");
                         Console.WriteLine("    undone");
+                        Console.WriteLine("    author");
                         Console.ReadKey();
                         break;
                     }
@@ -426,9 +488,31 @@ namespace Console_Project_Manager
                         }
                         switch (dir)
                         {
+                            case "author":
+                            {
+                                string[] list = pr.Authors.Split(separator);
+                                string newStr = "";
+                                foreach (var listunit in list)
+                                {
+                                    if (!string.IsNullOrEmpty(listunit))
+                                    {
+                                        if (listunit == smth && !deleted)
+                                        {
+                                            deleted = true;
+                                        }
+                                        else
+                                        {
+                                            newStr += listunit + '`';
+                                        }
+                                    }
+                                }
+
+                                pr.Authors = newStr;
+                                break;
+                            }
                             case "comment":
                                 {
-                                    string[] list = pr.comments.Split(separator);
+                                    string[] list = pr.Comments.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -445,12 +529,12 @@ namespace Console_Project_Manager
                                         }
                                     }
 
-                                    pr.comments = newStr;
+                                    pr.Comments = newStr;
                                     break;
                                 }
                             case "done":
                                 {
-                                    string[] list = pr.done.Split(separator);
+                                    string[] list = pr.Done.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -466,13 +550,13 @@ namespace Console_Project_Manager
                                             }
                                         }
                                     }
-                                    pr.done = newStr;
+                                    pr.Done = newStr;
                                     break;
                                 }
 
                             case "inprogress":
                                 {
-                                    string[] list = pr.inProgress.Split(separator);
+                                    string[] list = pr.InProgress.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -488,13 +572,13 @@ namespace Console_Project_Manager
                                             }
                                         }
                                     }
-                                    pr.inProgress = newStr;
+                                    pr.InProgress = newStr;
                                     break;
                                 }
 
                             case "undone":
                                 {
-                                    string[] list = pr.unDone.Split(separator);
+                                    string[] list = pr.UnDone.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -510,7 +594,7 @@ namespace Console_Project_Manager
                                             }
                                         }
                                     }
-                                    pr.unDone = newStr;
+                                    pr.UnDone = newStr;
                                     break;
                                 }
                         }
@@ -534,26 +618,31 @@ namespace Console_Project_Manager
                         }
                         switch (dir)
                         {
+                            case "author":
+                                {
+                                    pr.Authors += smth;
+                                    break;
+                                }
                             case "comment":
                                 {
-                                    pr.comments += smth;
+                                    pr.Comments += smth;
                                     break;
                                 }
                             case "done":
                                 {
-                                    pr.done += smth;
+                                    pr.Done += smth;
                                     break;
                                 }
 
                             case "inprogress":
                                 {
-                                    pr.inProgress += smth;
+                                    pr.InProgress += smth;
                                     break;
                                 }
 
                             case "undone":
                                 {
-                                    pr.unDone += smth;
+                                    pr.InProgress += smth;
                                     break;
                                 }
                         }
@@ -586,9 +675,9 @@ namespace Console_Project_Manager
                         }
                         switch (dir1)
                         {
-                            case "comment":
+                            case "author":
                                 {
-                                    string[] list = pr.comments.Split(separator);
+                                    string[] list = pr.Authors.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -605,12 +694,12 @@ namespace Console_Project_Manager
                                         }
                                     }
 
-                                    pr.comments = newStr;
+                                    pr.Authors = newStr;
                                     break;
                                 }
-                            case "done":
+                            case "comment":
                                 {
-                                    string[] list = pr.done.Split(separator);
+                                    string[] list = pr.Comments.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -626,13 +715,35 @@ namespace Console_Project_Manager
                                             }
                                         }
                                     }
-                                    pr.done = newStr;
+
+                                    pr.Comments = newStr;
+                                    break;
+                                }
+                            case "done":
+                                {
+                                    string[] list = pr.Done.Split(separator);
+                                    string newStr = "";
+                                    foreach (var listunit in list)
+                                    {
+                                        if (!string.IsNullOrEmpty(listunit))
+                                        {
+                                            if (listunit == smth && !deleted)
+                                            {
+                                                deleted = true;
+                                            }
+                                            else
+                                            {
+                                                newStr += listunit + '`';
+                                            }
+                                        }
+                                    }
+                                    pr.Done = newStr;
                                     break;
                                 }
 
                             case "inprogress":
                                 {
-                                    string[] list = pr.inProgress.Split(separator);
+                                    string[] list = pr.InProgress.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -648,13 +759,13 @@ namespace Console_Project_Manager
                                             }
                                         }
                                     }
-                                    pr.inProgress = newStr;
+                                    pr.InProgress = newStr;
                                     break;
                                 }
 
                             case "undone":
                                 {
-                                    string[] list = pr.unDone.Split(separator);
+                                    string[] list = pr.UnDone.Split(separator);
                                     string newStr = "";
                                     foreach (var listunit in list)
                                     {
@@ -670,32 +781,37 @@ namespace Console_Project_Manager
                                             }
                                         }
                                     }
-                                    pr.unDone = newStr;
+                                    pr.UnDone = newStr;
                                     break;
                                 }
                         }
                         switch (dir2)
                         {
+                            case "author":
+                                {
+                                    pr.Authors += smth;
+                                    break;
+                                }
                             case "comment":
                                 {
-                                    pr.comments += smth;
+                                    pr.Comments += smth;
                                     break;
                                 }
                             case "done":
                                 {
-                                    pr.done += smth;
+                                    pr.Done += smth;
                                     break;
                                 }
 
                             case "inprogress":
                                 {
-                                    pr.inProgress += smth;
+                                    pr.InProgress += smth;
                                     break;
                                 }
 
                             case "undone":
                                 {
-                                    pr.unDone += smth;
+                                    pr.UnDone += smth;
                                     break;
                                 }
                         }
@@ -709,11 +825,11 @@ namespace Console_Project_Manager
             File.Delete(filePath + "\\main.ctm");
             using (StreamWriter writer = File.CreateText(filePath + "\\main.ctm"))
             {
-                writer.WriteLine('[' + pr.projectName);
-                if (!string.IsNullOrEmpty(pr.comments))
+                writer.WriteLine('[' + pr.ProjectName);
+                if (!string.IsNullOrEmpty(pr.Comments))
                 {
                     char separator = '`';
-                    string[] list = pr.comments.Split(separator);
+                    string[] list = pr.Comments.Split(separator);
                     foreach (var comment in list)
                     {
                         if (!string.IsNullOrEmpty(comment))
@@ -723,11 +839,25 @@ namespace Console_Project_Manager
                         }
                     }
                 }
-                writer.WriteLine("<d");
-                if (!string.IsNullOrEmpty(pr.done))
+                writer.WriteLine("<a");
+                if (!string.IsNullOrEmpty(pr.Done))
                 {
                     char separator = '`';
-                    string[] list = pr.done.Split(separator);
+                    string[] list = pr.Authors.Split(separator);
+                    foreach (var comment in list)
+                    {
+                        if (!string.IsNullOrEmpty(comment))
+                        {
+                            writer.Write("    ");
+                            writer.WriteLine(comment);
+                        }
+                    }
+                }
+                writer.WriteLine("<d");
+                if (!string.IsNullOrEmpty(pr.Done))
+                {
+                    char separator = '`';
+                    string[] list = pr.Done.Split(separator);
                     foreach (var comment in list)
                     {
                         if (!string.IsNullOrEmpty(comment))
@@ -739,10 +869,10 @@ namespace Console_Project_Manager
                 }
                 writer.WriteLine(">");
                 writer.WriteLine("<i");
-                if (!string.IsNullOrEmpty(pr.inProgress))
+                if (!string.IsNullOrEmpty(pr.InProgress))
                 {
                     char separator = '`';
-                    string[] list = pr.inProgress.Split(separator);
+                    string[] list = pr.InProgress.Split(separator);
                     foreach (var comment in list)
                     {
                         if (!string.IsNullOrEmpty(comment))
@@ -754,10 +884,10 @@ namespace Console_Project_Manager
                 }
                 writer.WriteLine(">");
                 writer.WriteLine("<u");
-                if (!string.IsNullOrEmpty(pr.unDone))
+                if (!string.IsNullOrEmpty(pr.UnDone))
                 {
                     char separator = '`';
-                    string[] list = pr.unDone.Split(separator);
+                    string[] list = pr.UnDone.Split(separator);
                     foreach (var comment in list)
                     {
                         if (!string.IsNullOrEmpty(comment))
