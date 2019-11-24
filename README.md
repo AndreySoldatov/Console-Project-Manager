@@ -21,7 +21,7 @@ You can view your project from console or you can export it in html to contribut
 
 In fact CPM automaticly exports your  project.
 
-As a programmer you can enter the .cmt file in your project, understand a basic syntax and edit it manually!
+As a programmer you can enter the .cpm file in your project, understand a basic syntax and edit it manually!
 
 **usage**
 
