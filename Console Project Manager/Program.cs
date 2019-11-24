@@ -853,6 +853,7 @@ namespace Console_Project_Manager
                         }
                     }
                 }
+                writer.WriteLine(">");
                 writer.WriteLine("<d");
                 if (!string.IsNullOrEmpty(pr.Done))
                 {
