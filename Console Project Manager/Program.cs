@@ -87,7 +87,7 @@ namespace Console_Project_Manager
             pr.ProjectName = name;
             pr.Comments = "";
             pr.Done = "";
-            using (StreamReader read = new StreamReader(filePath + "\\main.ctm"))
+            using (StreamReader read = new StreamReader(filePath + "\\main.cpm"))
             {
                 int currentReading = 0;
                 while (true)
@@ -397,7 +397,7 @@ namespace Console_Project_Manager
         {
             string prjPath = dirPath + "\\" + name;
             Directory.CreateDirectory(prjPath);
-            using (StreamWriter writer = File.CreateText(prjPath + "\\main.ctm"))
+            using (StreamWriter writer = File.CreateText(prjPath + "\\main.cpm"))
             {
                 writer.WriteLine($"[{name}");
                 writer.WriteLine("<a");
@@ -822,8 +822,8 @@ namespace Console_Project_Manager
         }
         public static void FileFromPr(string filePath, Project pr)
         {
-            File.Delete(filePath + "\\main.ctm");
-            using (StreamWriter writer = File.CreateText(filePath + "\\main.ctm"))
+            File.Delete(filePath + "\\main.cpm");
+            using (StreamWriter writer = File.CreateText(filePath + "\\main.cpm"))
             {
                 writer.WriteLine('[' + pr.ProjectName);
                 if (!string.IsNullOrEmpty(pr.Comments))
